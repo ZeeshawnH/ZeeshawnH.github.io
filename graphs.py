@@ -10,14 +10,14 @@ import scipy.cluster.hierarchy as sch
 literal_eval = ast.literal_eval
 
 """
-- closed durring covid column 
-- remove businesses with no reviews in the period
-- minimum number of reviews for a business to be included in the analysis
-- histogram of reviews per business
-- Temp closed 
+- map of closed locations and open ones to compare
+- try review count heat map
+- bokeh category/ attribute bar interactive 
+- Time plot for restrictions 
+- calender plot for review counts for all restaurant
+- Word cloud for reviews for open and closed restaurants
+- 
 """
-
-
 
 #%%
 # load the businesses data and show basic info
@@ -205,7 +205,6 @@ checkins['date_list'] = checkins['date'].apply(lambda x: [datetime.datetime.strp
                                                          for date in x.split(',')])
 
 print(businesses['city'].value_counts())
-
 
 
 
@@ -423,4 +422,249 @@ plt.show()
 
 
 
+
+#%%
+# filtering to resturants and open and revirews in the period
+restaurants = businesses[businesses['categories'].apply(lambda x: "Restaurants" in x if isinstance(x, list) else False)]
+restaurants_id = restaurants['business_id'].tolist()
+restaurants_reviews = reviews[reviews['business_id'].isin(restaurants_id)]
+restaurants_reviews = restaurants_reviews[restaurants_reviews['date'] >= datetime.datetime(2019, 1, 1) ]
+restaurants = restaurants[restaurants['business_id'].isin(restaurants_reviews['business_id'].tolist())]
+
+restaurants["review_count"] = restaurants_reviews.groupby('business_id').size().reset_index(name='review_count')['review_count']
+
+counts = restaurants['review_count'].tolist()
+print("number of restaurants more than 50", sum([1 for i in counts if i > 50]))
+print("number of restaurants: ", len(restaurants))
+print("number of restaurants with reviews: ", len(restaurants_reviews))
+# plt.hist(counts, bins=30, color='blue', alpha=0.7);
+
+#%%
+print("closed restaurants: ", restaurants[restaurants['is_open'] == 0].shape[0])
+print("closed businesses: ", businesses[businesses['is_open'] == 0].shape[0])
+
+#%%
+before_date = datetime.datetime(2020, 12, 30)
+after_date = datetime.datetime(2020, 3, 1)
+# get all closed restaurants that have reviews in 2019 or 2020
+closed_reviews = reviews[(reviews['date'] < before_date) &
+                         (reviews['date'] > after_date) &
+                          (reviews['business_id'].isin(restaurants_id)) & 
+                          (reviews['business_id'].isin(restaurants[restaurants['is_open'] == 0]['business_id'].tolist()))]
+closed_restaurants = restaurants[restaurants['business_id'].isin(closed_reviews['business_id'].tolist())]
+print("number of closed restaurants: ", len(closed_restaurants))
+print("number of reviews for closed restaurants: ", len(closed_reviews))
+
+open_reviews = reviews[(reviews['date'] < before_date) & 
+                          (reviews['date'] > after_date) &
+                       (reviews['business_id'].isin(restaurants_id)) & 
+                       (reviews['business_id'].isin(restaurants[restaurants['is_open'] == 1]['business_id'].tolist()))]
+open_restaurants = restaurants[restaurants['business_id'].isin(open_reviews['business_id'].tolist())]
+print("number of open restaurants: ", len(open_restaurants))
+print("number of reviews for open restaurants: ", len(open_reviews))
+
+
+
+# %%
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud
+import re
+
+def create_wordcloud(opendf,closeddf, engram, ratings,words = 20, max_df=0.8):
+    closed_text = closeddf[(closeddf['text'].notna())&
+                             (closeddf["stars"]<=ratings)]['text'].tolist()
+    open_text = opendf[(opendf['text'].notna())&
+                                (opendf["stars"]<=ratings)]['text'].tolist()
+
+    closed_text = [text.replace("'", '').replace("-","") for text in closed_text]
+    open_text = [text.replace("'", '').replace("-","") for text in open_text]
+    # replace numbers with x
+    closed_text = [re.sub(r'\d', 'x', text) for text in closed_text]
+    open_text = [re.sub(r'\d', 'x', text) for text in open_text]
+
+    vectorizer_closed = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True, ngram_range=engram, max_df=max_df)
+    tfidf_matrix_closed = vectorizer_closed.fit_transform(closed_text )
+    tf_idf_closed = pd.DataFrame(tfidf_matrix_closed.toarray(), columns=vectorizer_closed.get_feature_names_out())
+    tfidf_sum_closed = tf_idf_closed.sum(axis=0)/len(closed_text)
+    sorted_tfidf_closed = tfidf_sum_closed.sort_values(ascending=False)
+
+    vectorizer_open = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True, ngram_range=engram, max_df=max_df)
+    tfidf_matrix_open = vectorizer_open.fit_transform(open_text)
+    tf_idf_open = pd.DataFrame(tfidf_matrix_open.toarray(), columns=vectorizer_open.get_feature_names_out())
+    tfidf_sum_open = tf_idf_open.sum(axis=0)
+    sorted_tfidf_open = tfidf_sum_open.sort_values(ascending=False)/len(open_text)
+
+    tfidf =  sorted_tfidf_closed - sorted_tfidf_open
+    tfidf = tfidf[tfidf > 0].sort_values(ascending=False)
+
+
+    exclusive_closed_words = sorted_tfidf_closed.loc[~sorted_tfidf_closed.index.isin(sorted_tfidf_open.index)]
+
+    # sort descending
+    exclusive_closed_words = exclusive_closed_words.sort_values(ascending=False)
+    word_freq_open = dict(zip(sorted_tfidf_open.index, sorted_tfidf_open.values))
+    word_freq_closed = dict(zip(sorted_tfidf_closed.index, sorted_tfidf_closed.values))
+    word_freq_diff = dict(zip(tfidf.index, tfidf.values))
+
+    # combine the two dictionaries
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True, ngram_range=engram, max_df=max_df)
+    tfidf_matrix = vectorizer.fit_transform(open_text+closed_text)
+    tf_idf = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+    tfidf_sum = tf_idf.sum(axis=0)
+    sorted_tfidf_both = tfidf_sum.sort_values(ascending=False)/len(open_text)
+
+
+
+    wordcloud_closed = WordCloud(
+        width=800, 
+        height=400,
+        max_words=words,
+        background_color='white'
+    ).generate_from_frequencies(word_freq_closed)
+
+    wordcloud_open = WordCloud(
+        width=800, 
+        height=400,
+        max_words=words,
+        background_color='white'
+    ).generate_from_frequencies(word_freq_open)
+
+    wordcloud_diff = WordCloud(
+        width=800, 
+        height=400,
+        max_words=words,
+        background_color='white'
+    ).generate_from_frequencies(sorted_tfidf_both)
+
+    fig, ax = plt.subplots(1, 3, figsize=(20, 30))
+    ax[0].imshow(wordcloud_closed, interpolation='bilinear')
+    ax[0].set_title("Word Cloud for Closed Restaurants")
+    ax[0].axis("off")
+
+    ax[1].imshow(wordcloud_open, interpolation='bilinear')
+    ax[1].set_title("Word Cloud for Open Restaurants")
+    ax[1].axis("off")
+
+    ax[2].imshow(wordcloud_diff, interpolation='bilinear')
+    ax[2].set_title("Word Cloud for Difference")
+    ax[2].axis("off")
+    plt.tight_layout()
+
+
+
+
+# %%
+create_wordcloud(open_reviews, closed_reviews, (3,3), 2, words = 25, max_df= 0.3)
+# %%
+from sklearn.feature_extraction.text import TfidfVectorizer
+from wordcloud import WordCloud
+import re
+
+def create_wordcloud(opendf, closeddf, engram, ratings, words=20, max_df=0.8):
+    # group reviews by business_id
+    closed_grouped = closeddf[(closeddf['text'].notna()) & (closeddf["stars"] <= ratings)]
+    closed_text = closed_grouped.groupby('business_id')['text'].apply(lambda x: ' '.join(x)).tolist()
+
+    open_grouped = opendf[(opendf['text'].notna()) & (opendf["stars"] <= ratings)]
+    open_text = open_grouped.groupby('business_id')['text'].apply(lambda x: ' '.join(x)).tolist()
+
+    # clean text
+    def clean_text(texts):
+        texts = [t.replace("'", '').replace("-", "") for t in texts]
+        texts = [re.sub(r'\d+', 'x', t) for t in texts]
+        return texts
+
+    closed_text = clean_text(closed_text)
+    open_text = clean_text(open_text)
+
+    vectorizer_closed = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True,
+                                        ngram_range=engram, max_df=max_df)
+    tfidf_matrix_closed = vectorizer_closed.fit_transform(closed_text)
+    tf_idf_closed = pd.DataFrame(tfidf_matrix_closed.toarray(), columns=vectorizer_closed.get_feature_names_out())
+    sorted_tfidf_closed = tf_idf_closed.mean(axis=0).sort_values(ascending=False)
+
+    vectorizer_open = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True,
+                                      ngram_range=engram, max_df=max_df)
+    tfidf_matrix_open = vectorizer_open.fit_transform(open_text)
+    tf_idf_open = pd.DataFrame(tfidf_matrix_open.toarray(), columns=vectorizer_open.get_feature_names_out())
+    sorted_tfidf_open = tf_idf_open.mean(axis=0).sort_values(ascending=False)
+
+    tfidf_diff = (sorted_tfidf_closed - sorted_tfidf_open).dropna()
+    tfidf_diff = tfidf_diff[tfidf_diff > 0].sort_values(ascending=False)
+
+    exclusive_closed = sorted_tfidf_closed.loc[~sorted_tfidf_closed.index.isin(sorted_tfidf_open.index)].sort_values(ascending=False)
+
+    tfidf_matrix_both = vectorizer_closed.fit_transform(closed_text + open_text)
+    tf_idf_both = pd.DataFrame(tfidf_matrix_both.toarray(), columns=vectorizer_closed.get_feature_names_out())
+    sorted_tfidf_both = tf_idf_both.mean(axis=0).sort_values(ascending=False)
+
+
+    wordcloud_closed = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(sorted_tfidf_closed)
+    wordcloud_open = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(sorted_tfidf_open)
+    wordcloud_diff = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(sorted_tfidf_both)
+
+    fig, ax = plt.subplots(1, 3, figsize=(20, 30))
+    ax[0].imshow(wordcloud_closed, interpolation='bilinear')
+    ax[0].set_title("Word Cloud for Closed Restaurants")
+    ax[0].axis("off")
+
+    ax[1].imshow(wordcloud_open, interpolation='bilinear')
+    ax[1].set_title("Word Cloud for Open Restaurants")
+    ax[1].axis("off")
+
+    ax[2].imshow(wordcloud_diff, interpolation='bilinear')
+    ax[2].set_title("Exclusive Closed Words")
+    ax[2].axis("off")
+    plt.tight_layout()
+# %%
+create_wordcloud(open_reviews, closed_reviews, (3,3), 2, words = 25, max_df= 0.3)
+# %%
+def create_wordcloud_group(opendf, closeddf, engram=(1,2), ratings=2, words=20, max_df=0.8):
+    # filter and merge all reviews into one string per group
+    closed_text = closeddf[(closeddf['text'].notna()) & (closeddf["stars"] <= ratings)]['text']
+    open_text = opendf[(opendf['text'].notna()) & (opendf["stars"] <= ratings)]['text']
+
+    def clean(text_series):
+        text = ' '.join(text_series)
+        text = text.replace("'", '').replace("-", '')
+        text = re.sub(r'\d+', 'x', text)
+        text = re.sub(r'[^\x00-\x7F]+', ' ', text)
+        return [text]
+
+    closed_text = clean(closed_text)
+    open_text = clean(open_text)
+
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=10000, lowercase=True, 
+                                 ngram_range=engram, max_df=max_df)
+
+    tfidf = vectorizer.fit_transform(closed_text + open_text)
+    feature_names = vectorizer.get_feature_names_out()
+    
+    tfidf_closed = pd.Series(tfidf.toarray()[0], index=feature_names)
+    tfidf_open = pd.Series(tfidf.toarray()[1], index=feature_names)
+
+    tfidf_diff = (tfidf_closed - tfidf_open).sort_values(ascending=False)
+    tfidf_diff = tfidf_diff[tfidf_diff > 0]
+
+    tfidf_combined = pd.concat([tfidf_closed, tfidf_open], axis=1)
+    
+    wordcloud_closed = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(tfidf_closed)
+    wordcloud_open = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(tfidf_open)
+    wordcloud_diff = WordCloud(width=800, height=400, max_words=words, background_color='white').generate_from_frequencies(tfidf_combined)
+
+    fig, ax = plt.subplots(1, 3, figsize=(20, 30))
+    ax[0].imshow(wordcloud_closed, interpolation='bilinear')
+    ax[0].set_title("Closed Group")
+    ax[0].axis("off")
+
+    ax[1].imshow(wordcloud_open, interpolation='bilinear')
+    ax[1].set_title("Open Group")
+    ax[1].axis("off")
+
+    ax[2].imshow(wordcloud_diff, interpolation='bilinear')
+    ax[2].set_title("Exclusive to Closed")
+    ax[2].axis("off")
+    plt.tight_layout()
+# %%
+create_wordcloud(open_reviews, closed_reviews, (3,3), 2, words = 25, max_df= 0.3)
 # %%
