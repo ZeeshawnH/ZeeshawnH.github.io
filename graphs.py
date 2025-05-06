@@ -19,6 +19,23 @@ literal_eval = ast.literal_eval
 - 
 """
 
+
+
+"""
+- start with the larger picture with all data
+- why we chose the two cities and restaurants
+- talk about covid and election and how it affected business 
+- show with cal plot the business activity
+- our expectation is to find a larger number of reviews related to covid 
+- word cloud for reviews for open and closed restaurants
+- do a simple before and after for words related to covid 2 diffrenet (mask, takeout, delivery, hygiene, [delivery apps], gloves, pbe, to go,  etc.) 
+- 
+"""
+
+"""
+- types of cuisine histogram of reviews per cuisine 
+"""
+
 #%%
 # load the businesses data and show basic info
 BUSINESSES = pd.read_json("data/yelp_academic_dataset_business.json", lines=True, engine="pyarrow")
@@ -134,9 +151,11 @@ for _, row in tqdm.tqdm(BUSINESSES.iterrows(), total=BUSINESSES.shape[0]):
                     new_row[i + 1] = value
                     print(f"Failed to parse {attr}: {value}, type: {type(value)}")
 
-rows.append(new_row)
+    rows.append(new_row)
 
 attribute_df = pd.DataFrame(rows, columns=["business_id"] + attribute_ls)
+print("number of businesses with attributes: ", len(attribute_df))
+print(len(rows))
 attribute_freq = dict(sorted(attribute_freq.items(), key=lambda item: item[1], reverse=True))
 
 
@@ -667,4 +686,40 @@ def create_wordcloud_group(opendf, closeddf, engram=(1,2), ratings=2, words=20, 
     plt.tight_layout()
 # %%
 create_wordcloud(open_reviews, closed_reviews, (3,3), 2, words = 25, max_df= 0.3)
+# %%
+from scipy.stats import chi2_contingency
+results = []
+open_restaurants_ids = open_restaurants['business_id'].tolist()
+closed_restaurants_ids = closed_restaurants['business_id'].tolist()
+skiped =0
+for col in attribute_df.columns:
+    try:
+        if attribute_df[col].nunique() != 2:
+            skiped += 1
+            continue
+    except TypeError:
+        continue
+
+    group1 = attribute_df[attribute_df['business_id'].isin(open_restaurants_ids)][col]
+    group2 = attribute_df[attribute_df['business_id'].isin(closed_restaurants_ids)][col]
+
+    # Correctly construct inputs for crosstab
+    values = pd.concat([group1, group2])
+    groups = ['open'] * len(group1) + ['closed'] * len(group2)
+
+    table = pd.crosstab(values, groups)
+
+    chi2, p, _, _ = chi2_contingency(table)
+    results.append((col, p))
+results = sorted(results, key=lambda x: x[1])
+
+# %%
+important_attributes = [i for i in results if i[1] < 0.05]
+print("number of attributes with p < 0.05: ", len([i for i in results if i[1] < 0.05]),"and they are ", [i for i in results if i[1] < 0.05])
+print("number of attributes with p < 0.01: ", len([i for i in results if i[1] < 0.01]))
+print("Results", results)
+print("avrage attribute for closed restaurants: ", [(np.mean(attribute_df[attribute_df['business_id'].isin(closed_restaurants_ids)][col]),col) for col in attribute_df.columns if col in [i[0] for i in important_attributes]])
+print("avrage attribute for open restaurants: ", [(np.mean(attribute_df[attribute_df['business_id'].isin(open_restaurants_ids)][col]),col) for col in attribute_df.columns if col in [i[0] for i in important_attributes]])
+
+# %%
 # %%
