@@ -31,7 +31,7 @@ description: >- # this means to ignore newlines until "baseurl:"
     service models, and customer engagement that correlate with resilience.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  MrMustii
+github_username: Zeeshawnh
 
 # Build settings
 remote_theme: pages-themes/cayman@v0.2.0
