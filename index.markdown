@@ -24,13 +24,30 @@ One of the easiest ways of visualizing the impact of it without going to the ext
 
 
 <!-- how did we label closed and open due to covid -->
-
+To measure the success of restaurants, we need to identify those that closed due to COVID. This is done by filtering for restaurants and further filtering for those that received reviews during the COVID period. Additionally, restaurants marked as "closed" on Yelp are grouped together, as this indicates they were open at some point (to receive a review) and closed afterward. Those still marked as "open" are grouped into the open category.
+[some cool data/ plots maybe]
 
 <!-- show attribute significance -->
+The data shows clear differences in attributes between open and closed restaurants, with statistically significant patterns. Open restaurants were significantly more likely to offer services like delivery, drive-thru, bike parking, and takeout features that align convenience and accessibility with social distancing, contactless service, and mobility during lockdown. In contrast, closed restaurants more often emphasized in-person experiences such as reservations, group seating, alcohol service, and happy hour that became liabilities under COVID restrictions. Therefore the data suggests that restaurants that offered remote-friendly, low-contact service models were better positioned to endure the pandemic's impact. It’s important to remember that while these patterns are statistically significant, they reflect correlations not definitive evidence of causation.
 
 
 <!-- show difference in reviews for open and closed -->
+The word cloud illustrates the most common phrases found in reviews with ratings below 2 stars. On the left, we see reviews for closed restaurants, and on the right, reviews for open ones. This allows us to analyze customer sentiments and opinions, comparing the reasons behind the success of the open restaurants. Common complaints for open restaurants center around customer service, while closed ones highlight issues such as food quality, pricing, and hygiene. This comparison suggests that restaurant owners should prioritize food quality and hygiene (duh) over other factors for the best chance of success. However, correlation is not causation.
+[Insert image of word cloud]
 
+
+The importance of contactless service can be further explored in the following graph. This graph shows the percentage of monthly reviews that mention terms such as "delivery" or "to go".
+
+[Insert the new graph]
+
+This shows that the spike in "delivery" mentions occurred around the COVID period, indicating increased demand for contactless service. Furthermore, combining this with the fact that open restaurants provided significantly more contactless options than closed ones, we can conclude that one possible reason some restaurants closed is that they may have lacked adequate contactless service. However, correlation does not imply causation.
+
+
+The imprtance contactless service can be futher explored in the following graph. This graph shows the preceentage of monthly reveiws that mention of terms such as "delivery" or "to go".  
+
+[Insert the new graph]
+
+This shows the spike of "delivery" terms being mentioned is around covid which indcates some increase demand for contactless service. Futhermore, combining this with the fact that open resturant provided significantly more contactless options than closed ones did, we can conclude that one of the reasons that the resturants closed is because they could have lacked contactless service.
 
 <!-- show XXX using bokeh -->
 
