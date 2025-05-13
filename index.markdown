@@ -87,3 +87,8 @@ To better understand how different types of cuisines were affected by the pandem
 
 <!-- some conclusion -->
 
+Since the COVID-19 pandemic, the dining landscape has transformed significantly. As health concerns and lockdown measures brought dining in to a halt, restaurants that adapted quickly to offer takeout, delivery, and other contactless options were far more likely to survive. Our analysis of Yelp data from Tampa and Philadelphia reveals that these shifts weren’t temporary adaptations, but rather that they reshaped consumer expectations as well as general business models across the industry.
+
+Traditional take-out foods like pizza dominated in the beginning but as restaurants adapted, third-party delivery apps became a defining feature of this era, with mentions in user reviews skyrocketing during the pandemic. Despite many restaurants offering their own delivery services, customers tended to opt for third-party apps, likely due to their ease of use and comprehensive nature. This made partnering with these apps crucial for the success of many businesses.
+
+Ultimately, our data suggests that dining in the post-COVID era has taken advantage of the adaptations for speed, convenience, and flexibility. The measures that restaurants were forced to take to survive has allowed many customers to enjoy restaurant dining experiences from the comfort of their own homes. Whether this is a permanent paradigm shift in dining or just remnants of a response to a crisis remains to be seen, but for now, customers can enjoy the comfort that delivery and takeout options continue to provide.
