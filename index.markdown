@@ -28,14 +28,14 @@ We wanted to visualize the restaurants that were open and closed in both cities 
 <div style="width: 100%; height: 500px;">
   <iframe src="{{ site.baseurl }}/assets/philadelphia_map.html" frameborder="0" width="100%" height="100%"></iframe>
 </div>
-<div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+<div style="text-align: center; font-size: 0.8em; margin-top: 10px; margin-bottom: 20px;">
   <em>Map of Philadelphia restaurants: Green markers indicate restaurants that remained open through the pandemic, while red markers show restaurants that closed. The distribution appears relatively uniform across the city, suggesting that location within Philadelphia was not a major determining factor in restaurant survival.</em>
 </div>
 
 <div style="width: 100%; height: 500px;">
   <iframe src="{{ site.baseurl }}/assets/tampa_map.html" frameborder="0" width="100%" height="100%"></iframe>
 </div>
-<div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+<div style="text-align: center; font-size: 0.8em; margin-top: 10px; margin-bottom: 20px;">
   <em>Map of Tampa restaurants: Green markers show open restaurants while red markers indicate closed establishments. As with Philadelphia, the spatial distribution doesn't reveal clear geographic patterns in restaurant closures, suggesting that factors other than location played more significant roles in business survival.</em>
 </div>
 
