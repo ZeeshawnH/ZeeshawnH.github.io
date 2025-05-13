@@ -63,12 +63,12 @@ This shows that the spike in delivery terms mentions occurred around the COVID p
 
 <!-- show cuisine impacts using bokeh -->
 To better understand how different types of cuisines were affected by the pandemic, we visualized monthly review counts for the ten most popular cuisine categories using interactive Bokeh plots. The first plot presents the absolute number of reviews over time, revealing overall volume and seasonal patterns. The second plot normalizes each cuisine’s review counts relative to the level they had previous to the pandemic, making it easier to compare how much each cuisine was impacted.
-<div style="width: 100%; height: 500px;">
-  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine.html" frameborder="0" width="100%" height="100%"></iframe>
+<div style="width: 100%; height: 500px; overflow: hidden;">
+  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine.html" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>
 </div>
 
 <div style="width: 100%; height: 500px;">
-  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine_normalized.html" frameborder="0" width="100%" height="100%"></iframe>
+  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine_normalized.html" frameborder="0" width="100%" height="100%" scrolling="no"></iframe>
 </div>
 
 <!-- show locations of open and closed restaurants -->
