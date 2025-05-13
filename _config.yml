@@ -18,8 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "The Businesses that survived covid: Analysis use Yelp data"  
-email: s215225@dtu.dk
+title: "The Businesses that survived COVID-19: Analysis using the Yelp dataset"  
+email: s215225@dtu.dk, s240033@dtu.dk
 description: >- # this means to ignore newlines until "baseurl:"
     The COVID-19 pandemic triggered widespread disruptions,
     slowing economic activity, straining services, and reshaping daily life.
