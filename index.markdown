@@ -24,8 +24,16 @@ One of the easiest ways of visualizing the impact of it without going to the ext
 
 
 <!-- how did we label closed and open due to covid -->
-To measure the success of restaurants, we need to identify those that closed due to COVID. This is done by filtering for restaurants and further filtering for those that received reviews during the COVID period. Additionally, restaurants marked as "closed" on Yelp are grouped together, as this indicates they were open at some point (to receive a review) and closed afterward. Those still marked as "open" are grouped into the open category.
-[some cool data/ plots maybe]
+To measure the success of restaurants, we need to identify those that closed due to COVID. This is done by filtering for restaurants and further filtering for those that received reviews during the COVID period. Additionally, restaurants marked as "closed" on Yelp are grouped together, as this indicates they were open at some point (to receive a review) and closed afterward. Those still marked as "open" are grouped into the open category.  
+  
+We wanted to visualize the restaurants that were open and closed in both cities with the hopes of finding some type of pattern for this general aspect of the project, but we found out that more or less the restaurants that closed, did it rather in a uniform way. This can be seen in the two following maps.
+<div style="width: 100%; height: 500px;">
+  <iframe src="{{ site.baseurl }}/assets/philadelphia_map.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+
+<div style="width: 100%; height: 500px;">
+  <iframe src="{{ site.baseurl }}/assets/tampa_map.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
 
 <!-- show attribute significance -->
 The data shows clear differences in attributes between open and closed restaurants, with statistically significant patterns. Open restaurants were significantly more likely to offer services like delivery, drive-thru, bike parking, and takeout features that align convenience and accessibility with social distancing, contactless service, and mobility during lockdown. In contrast, closed restaurants more often emphasized in-person experiences such as reservations, group seating, alcohol service, and happy hour that became liabilities under COVID restrictions. Therefore the data suggests that restaurants that offered remote-friendly, low-contact service models were better positioned to endure the pandemic's impact. It’s important to remember that while these patterns are statistically significant, they reflect correlations not definitive evidence of causation.
@@ -49,8 +57,15 @@ The importance of contactless service can be further explored in the following g
 
 This shows that the spike in delivery terms mentions occurred around the COVID period, indicating increased demand for contactless service. Furthermore, combining this with the fact that open restaurants provided significantly more contactless options than closed ones, we can conclude that one possible reason some restaurants closed is that they may have lacked adequate contactless service
 
-<!-- show XXX using bokeh -->
+<!-- show cuisine impacts using bokeh -->
+To better understand how different types of cuisines were affected by the pandemic, we visualized monthly review counts for the ten most popular cuisine categories using interactive Bokeh plots. The first plot presents the absolute number of reviews over time, revealing overall volume and seasonal patterns. The second plot normalizes each cuisine’s review counts relative to the level they had previous to the pandemic, making it easier to compare how much each cuisine was impacted.
+<div style="width: 100%; height: 500px;">
+  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
 
+<div style="width: 100%; height: 500px;">
+  <iframe src="{{ site.baseurl }}/assets/monthly_reviews_cuisine_normalized.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
 
 <!-- show locations of open and closed restaurants -->
 
