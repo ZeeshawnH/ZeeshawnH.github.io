@@ -38,16 +38,16 @@ The word cloud illustrates the most common phrases found in reviews with ratings
 
 The importance of contactless service can be further explored in the following graph. This graph shows the percentage of monthly reviews that mention terms such as "delivery" or "to go".
 
-[Insert the new graph]
+![Common complaints in Bad Reviews](assets/wordcloudtermfreq.png)
 
 This shows that the spike in "delivery" mentions occurred around the COVID period, indicating increased demand for contactless service. Furthermore, combining this with the fact that open restaurants provided significantly more contactless options than closed ones, we can conclude that one possible reason some restaurants closed is that they may have lacked adequate contactless service. However, correlation does not imply causation.
 
 
-The imprtance contactless service can be futher explored in the following graph. This graph shows the preceentage of monthly reveiws that mention of terms such as "delivery" or "to go".  
+The importance of contactless service can be further explored in the following graph. This graph shows the percentage of monthly reviews that mention terms such as "delivery" or "to go".
 
-[Insert the new graph]
+![Percentage of monthly reviews that mention the delivery terms](assets/Takeaway.png)
 
-This shows the spike of "delivery" terms being mentioned is around covid which indcates some increase demand for contactless service. Futhermore, combining this with the fact that open resturant provided significantly more contactless options than closed ones did, we can conclude that one of the reasons that the resturants closed is because they could have lacked contactless service.
+This shows that the spike in delivery terms mentions occurred around the COVID period, indicating increased demand for contactless service. Furthermore, combining this with the fact that open restaurants provided significantly more contactless options than closed ones, we can conclude that one possible reason some restaurants closed is that they may have lacked adequate contactless service
 
 <!-- show XXX using bokeh -->
 
