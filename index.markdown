@@ -6,13 +6,11 @@ layout: default
 The COVID-19 pandemic had a profound impact on small businesses and restaurants across the globe. The restrictions imposed by local and state governments in an effort to curb the spread of the virus forced businesses to alter their strategies. Many struggled with this change, but some were able to overcome it and remain profitable.  
 
 <!-- Why is this topic relevant or important to understand? -->
-For this project, we’ll be exploring the effects of the COVID-19 pandemic on restaurants and small businesses in the cities of Tampa and Philadelphia. 
+For this project, we’ll be exploring the effects of the COVID-19 pandemic on restaurants and small businesses in the cities of Tampa and Philadelphia. Understanding the factors that enabled certain businesses to thrive during the pandemic can provide valuable insights into consumer behavior, and effective strategies for future disruptions. These findings could help policymakers and restaurant owners make data driven decisions to optimize operations, and allocate resources more effectively in the face of economic shocks.
 
 <!-- Where does the data come from? -->
-We’ll be using the Yelp Open Dataset, a subset of data that Yelp has collected on over 100,000 businesses across 11 different metro areas, including millions of reviews.  
-
 <!-- What does the dataset cover (scope, time period, granularity) and why? (show some time based plots) -->
-
+We’ll be using the Yelp Open Dataset, a subset of data that Yelp has collected on over 150,000 businesses across 11 different metro areas, including millions of reviews. This project will focus on two cities, Tampa and Philadelphia, as they have the most data available. While the dataset includes information and reviews on a variety of businesses, the analysis will be focused on restaurants. Furthermore, the timeframe of interest spans from 2019, the year before the pandemic began, through the end of 2020, capturing both baseline activity and the early impact of COVID-19.
 
 <!-- Why These Two Cities -->
 There were different approaches when COVID struck, on the one hand, we have cities that were very strict with their local regulations, like Philadelphia; on the other, there were those that were more lax, such as Tampa.
@@ -30,9 +28,15 @@ We wanted to visualize the restaurants that were open and closed in both cities 
 <div style="width: 100%; height: 500px;">
   <iframe src="{{ site.baseurl }}/assets/philadelphia_map.html" frameborder="0" width="100%" height="100%"></iframe>
 </div>
+<div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+  <em>Map of Philadelphia restaurants: Green markers indicate restaurants that remained open through the pandemic, while red markers show restaurants that closed. The distribution appears relatively uniform across the city, suggesting that location within Philadelphia was not a major determining factor in restaurant survival.</em>
+</div>
 
 <div style="width: 100%; height: 500px;">
   <iframe src="{{ site.baseurl }}/assets/tampa_map.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+<div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+  <em>Map of Tampa restaurants: Green markers show open restaurants while red markers indicate closed establishments. As with Philadelphia, the spatial distribution doesn't reveal clear geographic patterns in restaurant closures, suggesting that factors other than location played more significant roles in business survival.</em>
 </div>
 
 <!-- show attribute significance -->
