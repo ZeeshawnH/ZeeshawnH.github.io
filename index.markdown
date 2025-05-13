@@ -61,6 +61,15 @@ The importance of contactless service can be further explored in the following g
 
 This shows that the spike in delivery terms mentions occurred around the COVID period, indicating increased demand for contactless service. Furthermore, combining this with the fact that open restaurants provided significantly more contactless options than closed ones, we can conclude that one possible reason some restaurants closed is that they may have lacked adequate contactless service
 
+<!-- delivery apps part -->
+
+Mentions of delivery apps reveal a similar story. We can see the sharp increase in the mention of third party delivery apps like Grubhub, DoorDash, and UberEats with the beginning of the pandemic
+
+![Common complaints in Bad Reviews](assets/deliveryapps.png)
+
+The marked increase in mentions across nearly all major platforms reflects how deeply embedded these services became in everyday dining habits. Although many restaurants may offer delivery services of their own, users seem to prefer the convenience, ease of use, and familiarity with larger mainstream apps and services, as opposed to delivery options that may be specific to a particular restaurant. Many restaurants that did not already offer delivery services seem to have taken advantage of the new avenue of business that was created by these apps during the pandemic. For many, partnerships with delivery apps were not just convenient, but essential for survival.
+
+
 <!-- show cuisine impacts using bokeh -->
 To better understand how different types of cuisines were affected by the pandemic, we visualized monthly review counts for the ten most popular cuisine categories using interactive Bokeh plots. The first plot presents the absolute number of reviews over time, revealing overall volume and seasonal patterns. The second plot normalizes each cuisine's review counts relative to the level they had previous to the pandemic, making it easier to compare how much each cuisine was impacted.
 <div style="width: 100%; height: 500px;">
@@ -72,6 +81,8 @@ To better understand how different types of cuisines were affected by the pandem
 </div>
 
 <!-- show locations of open and closed restaurants -->
+
+
 
 
 <!-- some conclusion -->
